@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+                http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+
+	<!-- 설정 2-1 DB연결정보 파일 -->
+    <bean id="propertyPlaceholderConfigurer"
+        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <value>classpath:configuration/mybatis/config.properties</value>
+        </property>
+    </bean>
+
+	<!-- 설정 2-2  DB연결 세팅 -->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="${jdbc.driverClassName}" />
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+    </bean>
+
+	<!-- 설정 2-3 DB연결 준비 및 sql문 xml 파일 준비-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="mapperLocations" value="classpath*:sql/mybatis/mapper/**.xml" />
+    </bean>
+
+	<!-- 설정 2-4 DB 커넥션 생성-->
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg index="0" ref="sqlSessionFactory" />
+    </bean>
+    
+  <!-- 설정 2-5 property name에 해당하는 set메서드가 클래스에 존재해야 한다. -->
+   <!-- 
+    <bean id="storeBizDAO" class="kr.ywhs.dao.StoreBizDAO">
+        <property name="sqlSession" ref="sqlSession" />
+    </bean>
+  -->
+    <!-- <bean id="storeService" class="kr.ywhs.service.StoreService">
+    	<property name="storeBizDAO" ref="storeBizDAO" />
+    </bean> -->
+    
+    
+</beans>

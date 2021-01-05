@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.ywhs.mapper">
+	<select id="searchStoreSS" parameterType="java.util.Map"
+		resultType="kr.ywhs.dao.InventoryVO">
+		SELECT i.store_name, i.product_name, i.amount FROM
+		store_info s, inventory_info i WHERE s.store_name=i.store_name and
+		i.store_name=#{storeName} and i.product_name like
+		'%'||#{productName}||'%'
+	</select>
+	<insert id="addBookMark" parameterType="String">
+		INSERT INTO bookmarklist(store_name) VALUES (#{storeName})
+	</insert>
+	<delete id="deleteBookMark" parameterType="String">
+		delete from bookmarklist where store_name = #{storeName}
+	</delete>
+	<select id="searchProductPS" resultType="kr.ywhs.dao.InventoryVO"
+		parameterType="java.util.Map">
+		SELECT s.store_name, i.product_name, i.amount FROM store_info
+		s,inventory_info i WHERE s.store_name=i.store_name and s.address like
+		'%'||#{address}||'%' and i.product_name like '%'||#{productName}||'%'
+	</select>
+</mapper>
